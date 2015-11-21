@@ -1,0 +1,60 @@
+---
+title       : Data Products - Visualising historical COE data
+subtitle    : 
+author      : Joshua Chua
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {selfcontained, standalone, draft}
+knit        : slidify::knit2slides
+ext_widgets : {rcharts: ["libraries/nvd3", "libraries /highcharts", "libraries/morris"]}
+---
+## Getting the historical COE data
+In Singapore a Certificate of Entitlement (COE) is required for ownership of a vehicle. The government controls the vehicle population via the COE system. Obtainig a COE is done via a bidding process. The duration of a COE is 10 years and once the certificate expires the quote is recycled into the system.
+
+To create this application first we get the historical data from www.singstat.com.sg
+
+--- .class #id 
+## Application design
+A sidebar layout is used to display the total number of Certificates of Entitlement per year based on the different vehicle category types. The plots are divided into 3 categories: 
+  1. Quota of available COEs
+  2. The number of bids received
+  3. The number of successful bids
+  
+The user can filter for the years of interest in by using the slider and also filter on the different category of COEs from the checkboxes.
+
+--- .class #id 
+## Example of the graphs produced
+```{r ex1}#, echo = FALSE, eval=TRUE, results='asis', message=FALSE}
+setwd("~/GitHub/dataproducts")
+library(knitr)
+require(knitr)
+library(dplyr)
+require(rCharts)
+
+
+coe_data<-read.csv("coedata.csv",stringsAsFactors = F)
+coe_data<-subset(coe_data,Category!="Total")
+coe_data<-subset(coe_data,Bid_Type!="Dollar Amount"& Bid_Type!="PQP")
+coe_data<-aggregate(coe_data[c("quantity")],by=coe_data[c("Year","Bid_Type","Category")],FUN=sum)
+coe_data<-aggregate(coe_data[c("quantity")],by=coe_data[c("Year","Bid_Type","Category")],FUN=sum)
+dt<-coe_data %>% filter(Bid_Type=="Successful")
+
+p1<-nPlot(quantity ~ Year,data = dt,group = "Category",type = "lineChart",width = 600,height = 400)
+p1$chart(margin = list(left = 100))
+p1$xAxis(axisLabel = "Year", width = 80)
+p1$yAxis(axisLabel = "Quantity", width = 70)
+options(RCHART_WIDTH = 800, RCHART_HEIGHT = 500)
+p1$show("inline", cdn = TRUE)
+
+#dunno why the code below doesnt work
+#p1$save('fig/p1.html', cdn = TRUE)
+#cat('<iframe src="fig/p1.html" width=100%, height=600></iframe>')
+```
+
+--- .class #id 
+## Conclusion
+As the duration of a COE is 10 years we can see from the plot that there is a obvious cycle of supply.
+The app allows us to visualise the peak and trough years. Possibly useful in planning when to purchase a vehicle to minimise the cost.
