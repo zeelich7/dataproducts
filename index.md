@@ -28,21 +28,21 @@ The user can filter for the years of interest in by using the slider and also fi
 --- .class #id 
 ## Example of the graphs produced
 
-<div id = 'chart1d8461ce58e1' class = 'rChart nvd3'></div>
+<div id = 'chart1c0421442ad2' class = 'rChart nvd3'></div>
 <script type='text/javascript'>
  $(document).ready(function(){
-      drawchart1d8461ce58e1()
+      drawchart1c0421442ad2()
     });
-    function drawchart1d8461ce58e1(){  
+    function drawchart1c0421442ad2(){  
       var opts = {
- "dom": "chart1d8461ce58e1",
+ "dom": "chart1c0421442ad2",
 "width":    600,
 "height":    400,
 "x": "Year",
 "y": "quantity",
 "group": "Category",
 "type": "lineChart",
-"id": "chart1d8461ce58e1" 
+"id": "chart1c0421442ad2" 
 },
         data = [
  {
